@@ -15,9 +15,10 @@ app.put('/items/:id', updateItem);
 app.delete('/items/:id', deleteItem);
 
 // Start the server immediately so Cloud Run becomes healthy
-const PORT = process.env.PORT || 3000;
+// Correct (flexible port)
+const PORT = process.env.PORT || 3000; // Use Cloud Run's port, or 8080 for local dev
 app.listen(PORT, () => {
-  console.log(Web server is listening on port ${PORT});
+  console.log(`Server is running on port ${PORT}`);
 });
 
 // You can now try to connect to the database in the background
