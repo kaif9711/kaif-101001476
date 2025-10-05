@@ -1,28 +1,26 @@
+# This file instructs Cloud Build on how to build and push the Docker image.
 steps:
-  # Docker Build
+  # 1. Use the dockercloud builder to build the image [cite: 14]
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 
-           'us-central1-docker.pkg.dev/semester-2-408906/demo-0000000000/assignment2:${SHORT_SHA}', 
-           '.']
+    args: [
+      'build', 
+      '-t', 
+      # Tag the image with the Artifact Registry path and the commit SHA [cite: 15]
+      'us-central1-docker.pkg.dev/mdkaif-474201/kaif-101001476/assignment2:${SHORT_SHA}', 
+      '.'
+    ]
 
-  # Docker Push
+  # 2. Push the Docker image to your Artifact Registry [cite: 16]
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 
-           'us-central1-docker.pkg.dev/semester-2-408906/demo-0000000000/assignment2:${SHORT_SHA}']
+    args: [
+      'push', 
+      'us-central1-docker.pkg.dev/mdkaif-474201/kaif-101001476/assignment2:${SHORT_SHA}'
+    ]
 
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: gcloud
-    args:
-    - 'run'
-    - 'deploy'
-    - 'assignment2'
-    - '--image'
-    - 'us-central1-docker.pkg.dev/semester-2-408906/demo-0000000000/assignment2:${SHORT_SHA}'
-    - '--region'
-    - 'us-central1'
-    
+# List the images that are created by this build
 images:
-  - 'us-central1-docker.pkg.dev/semester-2-408906/demo-0000000000/assignment2:${SHORT_SHA}'
-  
+  - 'us-central1-docker.pkg.dev/mdkaif-474201/kaif-101001476/assigenmnt2:${SHORT_SHA}'
+
+# Set the logging option [cite: 17, 18]
 options:
-    defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
+  defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
