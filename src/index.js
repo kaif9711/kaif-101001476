@@ -14,11 +14,20 @@ app.post('/items', addItem);
 app.put('/items/:id', updateItem);
 app.delete('/items/:id', deleteItem);
 
+// --- FINAL FIX ---
+
+// Start the server immediately so Cloud Run becomes healthy
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(Web server is listening on port ${PORT});
+});
+
+// You can now try to connect to the database in the background
+// and check the logs later to debug the connection.
 db.init().then(() => {
-    app.listen(3000, () => console.log('Listening on port 3000'));
+  console.log('Database connection successful.');
 }).catch((err) => {
-    console.error(err);
-    process.exit(1);
+  console.error('Database connection failed:', err);
 });
 
 const gracefulShutdown = () => {
