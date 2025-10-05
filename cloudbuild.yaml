@@ -19,7 +19,7 @@ steps:
 
 # List the images that are created by this build
 images:
-  - 'us-central1-docker.pkg.dev/mdkaif-474201/kaif-101001476/assigenmnt2:${SHORT_SHA}'
+  - 'us-central1-docker.pkg.dev/mdkaif-474201/kaif-101001476/assignment2:${SHORT_SHA}''
 
 # Set the logging option [cite: 17, 18]
 options:
