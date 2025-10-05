@@ -14,8 +14,6 @@ app.post('/items', addItem);
 app.put('/items/:id', updateItem);
 app.delete('/items/:id', deleteItem);
 
-// --- FINAL FIX ---
-
 // Start the server immediately so Cloud Run becomes healthy
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
@@ -27,7 +25,7 @@ app.listen(PORT, () => {
 db.init().then(() => {
   console.log('Database connection successful.');
 }).catch((err) => {
-  console.error('Database connection failed:', err);
+  console.error('Database connection failed:', err);
 });
 
 const gracefulShutdown = () => {
