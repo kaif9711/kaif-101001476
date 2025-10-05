@@ -1,0 +1,28 @@
+steps:
+  # Docker Build
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 
+           'us-central1-docker.pkg.dev/semester-2-408906/demo-0000000000/assignment2:${SHORT_SHA}', 
+           '.']
+
+  # Docker Push
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 
+           'us-central1-docker.pkg.dev/semester-2-408906/demo-0000000000/assignment2:${SHORT_SHA}']
+
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+    - 'run'
+    - 'deploy'
+    - 'assignment2'
+    - '--image'
+    - 'us-central1-docker.pkg.dev/semester-2-408906/demo-0000000000/assignment2:${SHORT_SHA}'
+    - '--region'
+    - 'us-central1'
+    
+images:
+  - 'us-central1-docker.pkg.dev/semester-2-408906/demo-0000000000/assignment2:${SHORT_SHA}'
+  
+options:
+    defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
