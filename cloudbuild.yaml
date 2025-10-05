@@ -1,26 +1,24 @@
 steps:
-# 1. Docker Build: This step builds the Docker image.
-- name: 'gcr.io/cloud-builders/docker'
-  args: [
-    'build',
-    '-t',
-    # This is the full name of your image in Artifact Registry.
-    # It uses the region, your project ID, the repo name, and the image name:tag.
-    # $_SHORT_SHA is a built-in variable that uses the unique ID of your git commit as the tag.
-    'us-central1-docker.pkg.dev/kaif-474222/kaif-101001476/assignment2:${_SHORT_SHA}',
-    '.'
-    ]
+  # 1. Docker Build: This step builds the Docker image.
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'build',
+      '-t',
+      # The image is tagged with the short commit SHA provided by Cloud Build.
+      'us-central1-docker.pkg.dev/kaif-474222/kaif-101001476/assignment2:${SHORT_SHA}',
+      '.'
+      ]
 
-# 2. Docker Push: This step pushes the built image to your Artifact Registry.
-- name: 'gcr.io/cloud-builders/docker'
-  args: [
-    'push',
-    'us-central1-docker.pkg.dev/kaif-474222/kaif-101001476/assignment2:${_SHORT_SHA}'
-    ]
+  # 2. Docker Push: This step pushes the built image to your Artifact Registry.
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'push',
+      'us-central1-docker.pkg.dev/kaif-474222/kaif-101001476/assignment2:${SHORT_SHA}'
+      ]
 
 # This tells Cloud Build which images to make available for other steps or for deployment.
 images:
-- 'us-central1-docker.pkg.dev/kaif-474222/kaif-101001476/assignment2:${_SHORT_SHA}'
+  - 'us-central1-docker.pkg.dev/kaif-474222/kaif-101001476/assignment2:${SHORT_SHA}'
 
 # Options for the build process.
 options:
