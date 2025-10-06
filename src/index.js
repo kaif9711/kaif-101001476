@@ -1,10 +1,11 @@
 const express = require('express');
 const app = express();
 
-// Use the port defined by Cloud Run, or default to 3000 for local development
+// Use the port defined by Cloud Run, or default to 8080 for local development
 const PORT = process.env.PORT || 8080;
 
 app.use(express.json());
+// This serves all files from the 'static' directory
 app.use(express.static(__dirname + '/static'));
 
 // This route sends a 200 OK for the health check.
@@ -25,15 +26,17 @@ app.get('/items', (req, res) => {
 
 // Start the server
 app.listen(PORT, () => {
-    console.log(Listening on port ${PORT});
+    console.log(`Listening on port ${PORT}`);
     console.log('App is ready and running!');
 });
 
+// This function handles graceful shutdown.
 const gracefulShutdown = () => {
     console.log('Shutting down gracefully.');
     process.exit();
 };
 
+// Listen for termination signals to shut down gracefully.
 process.on('SIGINT', gracefulShutdown);
 process.on('SIGTERM', gracefulShutdown);
-process.on('SIGUSR2', gracefulShutdown); // Sent by nodemon
+process.on('SIGUSR2', gracefulShutdown); // This signal is sent by nodemon
