@@ -1,26 +1,29 @@
 steps:
-  # 1. Docker Build: This step builds the Docker image.
+  # Docker Build
   - name: 'gcr.io/cloud-builders/docker'
-    args: [
-      'build',
-      '-t',
-      # The image is tagged with the short commit SHA provided by Cloud Build.
-      'us-central1-docker.pkg.dev/kaif123/kaif-101001476/assignment2:${SHORT_SHA}',
-      '.'
-      ]
+    args: ['build', '-t', 
+           'us-central1-docker.pkg.dev/kaif123/kaif-101001476/assignment2:${SHORT_SHA}', 
+           '.']
 
-  # 2. Docker Push: This step pushes the built image to your Artifact Registry.
+  # Docker Push
   - name: 'gcr.io/cloud-builders/docker'
-    args: [
-      'push',
-      'us-central1-docker.pkg.dev/kaif123/kaif-101001476/assignment2:${SHORT_SHA}'
-      ]
+    args: ['push', 
+           'us-central1-docker.pkg.dev/kaif123/kaif-101001476/assignment2:${SHORT_SHA}']
 
-# This tells Cloud Build which images to make available for other steps or for deployment.
+  # Docker Deploy (for CD part)
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+    - 'run'
+    - 'deploy'
+    - 'assignment2'
+    - '--image'
+    - 'us-central1-docker.pkg.dev/kaif123/kaif-101001476/assignment2:${SHORT_SHA}'
+    - '--region'
+    - 'us-central1'
+    
 images:
   - 'us-central1-docker.pkg.dev/kaif123/kaif-101001476/assignment2:${SHORT_SHA}'
-
-# Options for the build process.
+  
 options:
-  # This sets the logging behavior as required by the assignment.
-  defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
+    defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
