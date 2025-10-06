@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 
 // Use the port defined by Cloud Run, or default to 3000 for local development
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 
 app.use(express.json());
 app.use(express.static(__dirname + '/static'));
