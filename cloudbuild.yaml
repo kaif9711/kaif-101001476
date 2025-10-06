@@ -1,29 +1,40 @@
+# This file defines the CI/CD pipeline for Cloud Build.
+
 steps:
-  # Docker Build
+  # Step 1: Build the Docker image
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 
-           'us-central1-docker.pkg.dev/kaif123/kaif-101001476/assignment2:${SHORT_SHA}', 
-           '.']
+    args: [
+      'build', 
+      '-t', 
+      'us-central1-docker.pkg.dev/kaif123/kaif-101001476/assignment2:${SHORT_SHA}', 
+      '.'
+    ]
 
-  # Docker Push
+  # Step 2: Push the Docker image to Artifact Registry
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 
-           'us-central1-docker.pkg.dev/kaif123/kaif-101001476/assignment2:${SHORT_SHA}']
+    args: [
+      'push', 
+      'us-central1-docker.pkg.dev/kaif123/kaif-101001476/assignment2:${SHORT_SHA}'
+    ]
 
-  # Docker Deploy (for CD part)
+  # Step 3: Deploy the new image to Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
-    args:
-    - 'run'
-    - 'deploy'
-    - 'assignment2'
-    - '--image'
-    - 'us-central1-docker.pkg.dev/kaif123/kaif-101001476/assignment2:${SHORT_SHA}'
-    - '--region'
-    - 'us-central1'
+    args: [
+      'run', 
+      'deploy', 
+      'assignment2', 
+      '--image', 
+      'us-central1-docker.pkg.dev/kaif123/kaif-101001476/assignment2:${SHORT_SHA}', 
+      '--region', 
+      'us-central1',
+      '--quiet' # Added to prevent the build from hanging on a confirmation prompt
+    ]
     
+# Specify the image to be stored in Artifact Registry upon a successful build.
 images:
   - 'us-central1-docker.pkg.dev/kaif123/kaif-101001476/assignment2:${SHORT_SHA}'
-  
+
+# Configure build options.
 options:
-    defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
+  defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
