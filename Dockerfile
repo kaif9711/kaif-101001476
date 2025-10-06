@@ -29,7 +29,7 @@ COPY --from=builder /usr/src/app/node_modules ./node_modules
 COPY --from=builder /usr/src/app .
 
 # Expose the port the app runs on
-EXPOSE 3000
+EXPOSE 8080
 
 # The command to run the application
 CMD [ "npm", "start" ]
